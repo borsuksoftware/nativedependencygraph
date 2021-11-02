@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+/.vs
+/Build
+/Lib
+/DependencyGraph/x64
+/DependencyGraphCore/x64

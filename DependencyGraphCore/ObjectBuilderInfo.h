@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "ObjectBuildingState.h"
-#include "ObjectBuildingMode.h"
 #include "WaitHandle.h"
 
 namespace dependencygraph {

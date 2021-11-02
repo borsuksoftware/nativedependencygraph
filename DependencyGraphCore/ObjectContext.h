@@ -7,8 +7,6 @@
 #include "IObjectBuilderProvider.h"
 #include "ObjectBuilderInfo.h"
 
-#include "Dictionary.h"
-
 namespace dependencygraph {
 
 	/// <summary>

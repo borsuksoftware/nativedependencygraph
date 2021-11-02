@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-#include "Dictionary.h"
-
 #include "ObjectContext.h"
 
 #include "FunctionBasedObjectBuilder.h"
@@ -18,10 +16,10 @@
 using namespace std::chrono_literals;
 
 #define ITERATIONCOUNT 20000
+#define THREADCOUNT 16
 
 int main()
 {
-	//
 	// Simple example showing how to use the library 
 	//
 	// This uses an arbitrary function to perform the 'build operation'. This is desinged to burn compute cycles so that the parallelism can be seen
@@ -55,13 +53,12 @@ int main()
 		return true;
 	};
 
-
 	{
 		auto totalStartTime = std::chrono::high_resolution_clock::now();
 
 		// We've chosen to use the priority based approach here so that people can see how they can use more complicated
 		// job scheduling algorithms if they like.
-		dependencygraph::PriorityBasedMultithreadedJobQueue priorityBasedMultithreadedJobQueue(16);
+		dependencygraph::PriorityBasedMultithreadedJobQueue priorityBasedMultithreadedJobQueue(THREADCOUNT);
 		auto jobQueue = priorityBasedMultithreadedJobQueue.highPriorityJobQueue;
 
 		dependencygraph::ObjectContext<int, double> objectContext(
@@ -94,8 +91,6 @@ int main()
 			}
 		}
 		std::wcout << L"Completed wait through wait handles" << std::endl;
-
-
 
 		int outstandingCount = 0;
 		int handledCount = 0;
@@ -134,16 +129,11 @@ int main()
 		auto totalTimeTaken = totalEnd - totalStartTime;
 		std::wcout << L"Waiting time: " << (waitingTime.count() / 1000000) << L"ms" << std::endl;
 		std::wcout << L"Total time taken: " << (totalTimeTaken.count() / 1000000) << L"ms" << std::endl;
-
-		// std::wcout << L"Total jobs submitted: " << jobQueue->totalRequests.load() << std::endl;
-
-		// stop.store(true);
-		// t.join();
 	}
 
 	std::wcout << L"Object Context gone" << std::endl;
 
-	if (true)
+	if (false)
 	{
 		std::wcout << std::endl;
 		std::wcout << L"Single threaded mode" << std::endl;
@@ -162,7 +152,7 @@ int main()
 		auto timeTaken = endTime - now;
 		std::wcout << L"Total: " << output << std::endl;
 		std::wcout << L"Time taken: " << (timeTaken.count() / 1000000) << L"ms" << std::endl;
-		std::wcout << L"Time taken (/16): " << (timeTaken.count() / 16000000) << L"ms" << std::endl;
+		std::wcout << L"Time taken (/" << THREADCOUNT << L"): " << (timeTaken.count() / (THREADCOUNT * 1000000)) << L"ms" << std::endl;
 	}
 
 	obp = nullptr;

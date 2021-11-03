@@ -21,7 +21,12 @@ The tool is based off multiple parts:
 * ObjectBuilderProvider - a component which can provide an object builder for a given address
 * JobQueue - the component which will perform the actual object building, can be single threaded, multi-threaded or completely customised
 
+All requests to start the build process for an object should be made on the object context which can perform the necessary orchestrations, i.e. work out what is required to do in order to build the item, before pushing jobs to the job queue which has the responsibility of executing the jobs. Note that when a request has been made, control will be returned to the originally caller as soon as practically possible which means that it's up to the caller to wait (a wait handle is provided) on the object being ready. This applies to both building the object and sourcing the dependencies for building the object - the latter being necessary to allow support for recursive dependencies.
+
 ## FAQs
+#### Why did you create this?
+This was a native port of a piece of functionality that we had already written in .net. We wanted similar functionality in native code so we created it. Our initial intended use-case was in construction market objects from data for some financial analysis. Or maybe we did it just because we wanted to write some multi-threaded code. You can pick :-)
+
 #### Can we use this in our project?
 Please do. The only thing we ask (but not require) is that you let us know that you find the code useful. It really does provide encouragement to provide more functionality.
 
